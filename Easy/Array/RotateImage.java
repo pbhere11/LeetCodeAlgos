@@ -2,7 +2,7 @@
   [1,2,3],
   [4,5,6],
   [7,8,9]
-
+  
    [7,4,1],
   [8,5,2],
   [9,6,3]
@@ -20,12 +20,26 @@
 */
 class Solution {
     public void rotate(int[][] matrix) {
-        for(int i=0;i<matrix.length/2;i++)
-        {
-        	for(int j=i;j<matrix[i].length-1-i;j++)
-        	{
-        		//
-        	}
-        }
+       for(int i=0;i<matrix.length/2;i++)
+       {
+          for(int j=i;j<matrix[i].length-1-i;j++)
+          {
+              
+              // saving the temp
+              int temp = matrix[i][j];
+
+              //left to top
+              matrix[i][j] = matrix[matrix.length-1-j][i];
+
+              //bottom to left
+              matrix[matrix.length-1-j][i] = matrix[matrix.length-1-i][matrix.length-1-j];
+
+              //right to bottom
+              matrix[matrix.length-1-i][matrix.length-1-j] = matrix[j][matrix[i].length-1-i];
+
+              //top to right
+              matrix[j][matrix[i].length-1-i] =temp;
+          }
+       }
     }
 }
