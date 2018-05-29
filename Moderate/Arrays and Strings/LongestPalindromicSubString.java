@@ -1,14 +1,10 @@
 /*
-Example 1:
 
 Input: "babad"
 Output: "bab"
 Note: "aba" is also a valid answer.
-Example 2:
-
-Input: "cbbd"
-Output: "bb"
 */
+
 class Solution {
     public String longestPalindrome(String s) {
     	if(s.length()==0)
