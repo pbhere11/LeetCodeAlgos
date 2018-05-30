@@ -6,6 +6,7 @@
  *     ListNode(int x) { val = x; }
  * }
  Input: 1->2->3->4->5->NULL
+
 Output: 1->3->5->2->4->NULL
  */
 class Solution {
