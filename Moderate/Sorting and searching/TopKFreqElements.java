@@ -6,6 +6,7 @@ class Solution {
     public List<Integer> topKFrequent(int[] nums, int k) {
         
         HashMap<Integer,Integer> counterMap = new HashMap<Integer,Integer>();
+        //O(n)
         for(int i=0;i<nums.length;i++)
         {
             if(counterMap.containsKey(nums[i]))
@@ -19,22 +20,27 @@ class Solution {
         }
         int[] heap = new int[counterMap.size()];
         int index =0;
+        //O(n)
         for(int num : counterMap.keySet())
         {
             heap[index] = num;
             index++;
         }
-        heapSize = heap.length;
+        heapSize = k;
+        //O(nlgn)
         buildHeap(heap,counterMap);
         List<Integer> result = new ArrayList<Integer>();
+        for(int i=k;i<heap.length;i++)
+        {
+            if(counterMap.get(heap[i])>counterMap.get(heap[0]))
+            {
+                heap[0] = heap[i];
+                minHeapify(heap,counterMap,0);
+            }
+        }
         for(int i=0;i<k;i++)
         {
-            int temp = heap[0];
-            heap[0] = heap[heapSize-1];
-            heap[heapSize-1] = temp;
-            result.add(heap[heapSize-1]);
-            heapSize--;
-            maxHeapify(heap,counterMap,0);
+            result.add(heap[i]);
         }
         return result;
     }
@@ -44,29 +50,29 @@ class Solution {
     {
         for(int i=heap.length/2;i>=0;i--)
         {
-            maxHeapify(heap,counterMap,i);
+            minHeapify(heap,counterMap,i);
         }
     }
 
-    private void maxHeapify(int[] heap,HashMap<Integer,Integer> counterMap, int index)
+    private void minHeapify(int[] heap,HashMap<Integer,Integer> counterMap, int index)
     {
         int left = 2*index+1;
         int right = 2*index+2;
-        int max = index;
-        if(left>=0 && left<heapSize && counterMap.get(heap[left])>counterMap.get(heap[index]))
+        int min = index;
+        if(left>=0 && left<heapSize && counterMap.get(heap[left])<counterMap.get(heap[index]))
         {
-            max = left;
+            min = left;
         }
-        if(right>=0 && right<heapSize && counterMap.get(heap[right])>counterMap.get(heap[max]))
+        if(right>=0 && right<heapSize && counterMap.get(heap[right])<counterMap.get(heap[min]))
         {
-            max = right;
+            min = right;
         }
-        if(max!=index)
+        if(min!=index)
         {
-            int temp = heap[max];
-            heap[max] = heap[index];
+            int temp = heap[min];
+            heap[min] = heap[index];
             heap[index] = temp;
-            maxHeapify(heap,counterMap,max);
+            minHeapify(heap,counterMap,min);
         }
     }
 
