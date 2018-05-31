@@ -2,82 +2,72 @@
 Given [1,1,1,2,2,3] and k = 2, return [1,2].
 */
 class Solution {
-	public int heapSize = 0;
+    private int heapSize =0;
     public List<Integer> topKFrequent(int[] nums, int k) {
-    	heapSize=k;
-        HashMap<Integer,Integer> countMap = new HashMap<Integer,Integer>();
-
-        //O(n)
+        
+        HashMap<Integer,Integer> counterMap = new HashMap<Integer,Integer>();
         for(int i=0;i<nums.length;i++)
         {
-        	if(countMap.containsKey(nums[i]))
-        	{
-        		countMap.put(nums[i],countMap.get(nums[i])+1);
-        	}
-        	else
-        	{
-        		countMap.put(nums[i],1);
-        	}
+            if(counterMap.containsKey(nums[i]))
+            {
+                counterMap.put(nums[i],counterMap.get(nums[i])+1);
+            }
+            else
+            {
+                counterMap.put(nums[i],1);
+            }
         }
-        int[] heap = new int[countMap.size()];
-        int x=0;
-        for(Map.Entry<Integer, Integer> entry: countMap.entrySet())
+        int[] heap = new int[counterMap.size()];
+        int index =0;
+        for(int num : counterMap.keySet())
         {
-        	heap[x] = entry.getKey();
-        	x++;
+            heap[index] = num;
+            index++;
         }
-        heapSort(heap,countMap);
-        for(int j=k;j<heap.length;j++)
-        {
-        	int temp = heap[0];
-        	heap[0] = heap[heapSize-1];
-        	heap[heapSize-1] = temp;
-        	if(countMap.get(heap[j])>=countMap.get(heap[0]))
-        	{
-        		heap[0] = heap[j];
-        	}
-        	maxHeapify(heap,countMap,0);
-        }
+        heapSize = heap.length;
+        buildHeap(heap,counterMap);
         List<Integer> result = new ArrayList<Integer>();
-
-        for(int j=0;j<k;j++)
+        for(int i=0;i<k;i++)
         {
-        	result.add(heap[j]);
+            int temp = heap[0];
+            heap[0] = heap[heapSize-1];
+            heap[heapSize-1] = temp;
+            result.add(heap[heapSize-1]);
+            heapSize--;
+            maxHeapify(heap,counterMap,0);
         }
-
         return result;
     }
+    
 
-    private void heapSort(int[] nums, HashMap<Integer,Integer>countMap)
+    private void buildHeap(int[] heap,HashMap<Integer,Integer> counterMap)
     {
-    	buildHeap(nums,countMap);
+        for(int i=heap.length/2;i>=0;i--)
+        {
+            maxHeapify(heap,counterMap,i);
+        }
     }
-    private void buildHeap(int[] nums, HashMap<Integer,Integer>countMap)
+
+    private void maxHeapify(int[] heap,HashMap<Integer,Integer> counterMap, int index)
     {
-    	for(int i=nums.length/2;i>=0;i--)
-    	{
-    		maxHeapify(nums,countMap, i);
-    	}
+        int left = 2*index+1;
+        int right = 2*index+2;
+        int max = index;
+        if(left>=0 && left<heapSize && counterMap.get(heap[left])>counterMap.get(heap[index]))
+        {
+            max = left;
+        }
+        if(right>=0 && right<heapSize && counterMap.get(heap[right])>counterMap.get(heap[max]))
+        {
+            max = right;
+        }
+        if(max!=index)
+        {
+            int temp = heap[max];
+            heap[max] = heap[index];
+            heap[index] = temp;
+            maxHeapify(heap,counterMap,max);
+        }
     }
-    private void maxHeapify(int[] nums, HashMap<Integer,Integer>countMap, int i)
-    {
-    	int left = 2*i+1;
-    	int right = 2*i+2;
-    	int max = i;
-    	if(left < heapSize && countMap.get(nums[left])>=countMap.get(nums[i]))
-    	{
-    		max = left;
-    	}
-    	if(right < heapSize && countMap.get(nums[right])>=countMap.get(nums[max]))
-    	{
-    		max = right;
-    	}
-    	if(max!=i)
-    	{
-    		int temp = nums[max];
-	    	nums[max] = nums[i];
-	    	nums[i] = temp;
-	    	maxHeapify(nums, countMap,max);
-    	}
-    }
+
 }
