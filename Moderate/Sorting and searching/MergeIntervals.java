@@ -66,11 +66,11 @@ class Solution {
     	{
     		if(intervals.get(i).start<key)
     		{
-    			Collections.swap(intervals,i,start);
-    			start++;
+    			Collections.swap(intervals,i,leftIndex);
+    			leftIndex++;
     		}
     	}
-    	Collections.swap(intervals,end,start);
-		return start;
+    	Collections.swap(intervals,end,leftIndex);
+		return leftIndex;
     }
 }
