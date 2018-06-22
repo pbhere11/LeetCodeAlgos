@@ -35,6 +35,21 @@ rotate the input matrix in-place such that it becomes:
 
 public class Solution {
     public void Rotate(int[,] matrix) {
-        
+        for(int i=0;i<matrix.GetLength(0)/2;i++)
+        {
+            for(int j=i;j<matrix.GetLength(1)-1-i;j++)
+            {
+                //savin the top element
+                int temp = matrix[i,j];
+                //left to top
+                matrix[i,j] = matrix[matrix.GetLength(0)-1-j,i];
+                //bottom to top
+                matrix[matrix.GetLength(0)-1-j,i] = matrix[matrix.GetLength(0)-1-i,matrix.GetLength(1)-1-j];
+                //right to bottom
+                matrix[matrix.GetLength(0)-1-i,matrix.GetLength(1)-1-j] = matrix[j,matrix.GetLength(1)-1-i];
+                //top to right
+                matrix[j,matrix.GetLength(1)-1-i] = temp;
+            }
+        }
     }
 }
