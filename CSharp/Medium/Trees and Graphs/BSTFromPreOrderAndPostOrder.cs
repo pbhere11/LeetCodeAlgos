@@ -32,7 +32,7 @@ public class Solution {
     	{
     		TreeNode node = new TreeNode(preorder[index]);
 	    	index++;
-	    	int preNodeIndex = GetPreNodeIndex(inorder,node.val);
+	    	int preNodeIndex = GetPreNodeIndex(inorder,node.val,start,end);
 	    	node.left = BuildTree(preorder,inorder,start,preNodeIndex-1);
 	    	node.right = BuildTree(preorder,inorder,preNodeIndex+1,end);
 	    	return node;
@@ -44,9 +44,9 @@ public class Solution {
     	
     }
 
-    private int GetPreNodeIndex(int[] inorder, int preNodeVal)
+    private int GetPreNodeIndex(int[] inorder, int preNodeVal, int start, int end)
     {
-    	for(int i=0;i<inorder.Length;i++)
+    	for(int i=start;i<=end;i++)
     	{
     		if(inorder[i]==preNodeVal)
     		{
