@@ -12,6 +12,9 @@ Output: 4
 public class Solution {
     private int HeapSize = 0;
     public int FindKthLargest(int[] nums, int k) {
+    	return FindKthLargestHeap(nums,k);
+    }
+    public int FindKthLargestHeap(int[] nums, int k) {
     	if(nums.Length==0)
     	{
     		return 0;
