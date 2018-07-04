@@ -32,6 +32,6 @@ public class Solution {
         		matrix[i,j] = matrix[i-1,j]+matrix[i,j-1];
         	}
         }
-        
+        return matrix[m-1,n-1];
     }
 }
