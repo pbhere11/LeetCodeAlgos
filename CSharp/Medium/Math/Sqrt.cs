@@ -17,17 +17,18 @@ public class Solution {
         {
         	return x;
         }
-        int start =1;
-        int end = x;
-        int ans = 1;
+        long start =1;
+        long end = x;
+        long ans = 1;
         while(start<=end)
         {
-        	int mid = (start+end)/2;
-        	if(mid*mid == x)
+        	long mid = (start+end)/2;
+            long temp = mid*mid;
+        	if(temp == x)
         	{
-        		return mid;
+        		return (int)mid;
         	}
-        	if(mid*mid<x)
+        	if(temp<x)
         	{
         		start = mid+1;
         		ans = mid;
@@ -37,6 +38,6 @@ public class Solution {
         		end = mid-1;
         	}
         }
-        return ans;
+        return (int)ans;
     }
 }
