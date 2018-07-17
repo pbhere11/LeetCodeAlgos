@@ -40,13 +40,14 @@ public class Solution {
     {
     	if(index<nums.Length)
     	{
-    		Subset(nums,index+1,innerList,result);
+    		
     		IList<int> tempList = new List<int>();
     		for(int i=0;i<innerList.Count;i++)
     		{
     			tempList.Add(innerList[i]);
     		}
     		tempList.Add(nums[index]);
+        Subset(nums,index+1,innerList,result);
     		Subset(nums,index+1,tempList,result);
     	}
     	else
