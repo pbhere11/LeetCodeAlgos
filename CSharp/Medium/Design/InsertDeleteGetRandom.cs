@@ -25,9 +25,12 @@ randomSet.insert(2);
 // Since 2 is the only number in the set, getRandom always return 2.
 randomSet.getRandom();
 */
+
 public class RandomizedSet {
 
-    Dictionary<int,int> map = new Dictionary<int,int>();
+    Dictionary<int,int> map1 = new Dictionary<int,int>();
+    Dictionary<int,int> map2 = new Dictionary<int,int>();
+    Random rnd = new Random();
     /** Initialize your data structure here. */
     public RandomizedSet() {
         
@@ -35,17 +38,49 @@ public class RandomizedSet {
     
     /** Inserts a value to the set. Returns true if the set did not already contain the specified element. */
     public bool Insert(int val) {
-        
+        if(map1.ContainsKey(val))
+        {
+            return false;
+        }
+        else
+        {
+            map1.Add(val,map2.Count);
+            map2.Add(map2.Count,val);
+            return true;
+        }
     }
     
     /** Removes a value from the set. Returns true if the set contained the specified element. */
     public bool Remove(int val) {
-        
+        if(!map1.ContainsKey(val))
+        {
+            return false;
+        }
+        else
+        {
+            int index = map1[val];
+            map1.Remove(val);
+            map2.Remove(index);
+            if(map2.Count==0)
+            {
+                return true;
+            }
+            if(index==map2.Count)
+            {
+                return true;
+            }
+            int newVal = map2[map2.Count];
+            map2.Add(index,newVal);
+            map2.Remove(map2.Count);
+            map1[newVal] = index;
+            return true;
+        }
     }
     
     /** Get a random element from the set. */
     public int GetRandom() {
-        
+        int index = rnd.Next(map2.Count);
+        return map2[index];
     }
 }
 
