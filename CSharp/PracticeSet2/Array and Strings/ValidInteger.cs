@@ -7,126 +7,144 @@ Some examples:
 "abc" => false
 "1 a" => false
 "2e10" => true
+number
+e
+space
+decimal point
+other char
+
+aaa
+e
+.9 8
+  9
+
 */
 public class Solution {
     public bool IsNumber(string s) {
-        int i=0;
         bool numStarted = false;
-        bool exponentStarted = false;
         bool decimalStarted = false;
+        bool expStarted = false;
         bool numEnded = false;
-        int result =0;
-        while(i<s.Length)
+        bool signStarted = false;
+        char prev = '#';
+        for(int i=0;i<s.Length;i++)
         {
-        	if(!numStarted)
-        	{
-        		if(isNumber(s[i]))
-        		{
-        			numStarted = true;
-        			i++;
-        		}
-        		else if(isSpace(s[i]))
-        		{
-        			if(decimalStarted || exponentStarted)
-        			{
-        				return false;
-        			}
-        			else
-        			{
-        				i++;
-        			}
-        		}
-        		else if(isDecimalPoint(s[i]))
-        		{
-        			if(decimalStarted)
-					{
-						return false;
-					}
-        			else
-        			{
-        				decimalStarted = true;
-        				i++;
-        			}
-        		}
-        		else
-        		{
-        			return false;
-        		}
-        	}
-        	else
-        	{
-        		if(isSpace(s[i]))
-        		{
-        			if(decimalStarted || exponentStarted)
-        			{
-        				return false;
-        			}
-        			else
-        			{
-        				numEnded = true;
-        				i++;
-        			}
-        		}
-        		else if(!(isNumber(s[i])||isExponent(s[i])||isDecimalPoint(s[i])))
-        		{
-        			return false;
-        		}
-        		else
-        		{
-        			if(numEnded)
-        			{
-        				return false;
-        			}
-        			if(isExponent(s[i]))
-        			{
-        				if(exponentStarted)
-        				{
-        					return false;
-        				}
-        				else
-        				{
-        					exponentStarted = true;
-        					i++;
-        				}
-        			}
-        			else
-        			{
-        				if(isDecimalPoint(s[i]))
-        				{
-        					if(decimalStarted)
-        					{
-        						return false;
-        					}
-        					else
-        					{
-        						decimalStarted = true;
-        						i++;
-        					}
-        				}
-        				else
-        				{
-        					i++;
-        				}
-        			}
-        		}
-        	}
+            char c = s[i];
+            if(!isNumber(c)&&!isDecimal(c)&&!isExponential(c)&&!isSpace(c)&&!isSign(c))
+            {
+                return false;
+            }
+            if(!numStarted)
+            {
+                if(isExponential(c))
+                {
+                    return false;
+                }
+                if(isNumber(c))
+                {
+                    numStarted = true;
+                }
+                else if(isDecimal(c))
+                {
+                    if(decimalStarted)
+                    {
+                        return false;
+                    }
+                    decimalStarted = true;
+                }
+                else if(isSpace(c))
+                {
+                    if(isDecimal(prev)||isSign(prev))
+                    {
+                        return false;
+                    }
+                }
+                else if(isSign(c))
+                {
+                    if(decimalStarted||signStarted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        signStarted = true;
+                    }
+                }
+            }
+            else
+            {
+                if(isSpace(c))
+                {
+                    if(isExponential(prev))
+                    {
+                        return false;
+                    }
+                    numEnded = true;
+                }
+                else if(numEnded)
+                {
+                    return false;
+                }
+                else if(isSign(c))
+                {
+                    if(!isExponential(prev))
+                    {
+                        return false;
+                    }
+                }
+                else if(isDecimal(c))
+                {
+                    if(isExponential(prev)||isDecimal(prev))
+                    {
+                        return false;
+                    }
+                    if(decimalStarted||expStarted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        decimalStarted = true;
+                    }
+                }
+                else if(isExponential(c))
+                {
+                    if(isExponential(prev))
+                    {
+                        return false;
+                    }
+                    if(expStarted)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        expStarted = true;
+                    }
+                }
+            }
+            prev = c;
         }
-        return numStarted && !isExponent(s[s.Length-1]);
+        return numStarted&&!isExponential(prev)&&!isSign(prev);
     }
     private bool isNumber(char c)
     {
-    	return ((int)c-'0')>=0&&((int)c-'0')<=9;
+        return (int)c-'0'>=0 && (int)c-'0'<=9;
     }
-    private bool isExponent(char c)
+    private bool isExponential(char c)
     {
-    	return c=='e';
+        return c=='e';
     }
-    private bool isDecimalPoint(char c)
+    private bool isDecimal(char c)
     {
-    	return c=='.';
+        return c=='.';
+    }
+    private bool isSign(char c)
+    {
+        return c=='+'||c=='-';
     }
     private bool isSpace(char c)
     {
-    	return char.IsWhiteSpace(c);
+        return char.IsWhiteSpace(c);
     }
 }
