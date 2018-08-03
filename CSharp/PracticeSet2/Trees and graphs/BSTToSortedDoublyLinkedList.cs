@@ -16,6 +16,9 @@ public class Node {
     2       5
 
 1       3
+left = 1
+right = 3
+
 */
 public class Solution {
     public Node TreeToDoublyList(Node root) {
@@ -23,12 +26,36 @@ public class Solution {
         {
             return null;
         }
-        if(root.left==null&&root.right==null)
-        {
-            return root;
-        }
         Node left = TreeToDoublyList(root.left);
         Node right = TreeToDoublyList(root.right);
         
+        root.left = root;
+        root.right = root;
+
+        Node n = Concatnate(left,root);
+        n = Concatnate(n,right); 
+        return n;
+    }
+
+    private Node Concatnate(Node leftNode, Node rightNode)
+    {
+        if(leftNode==null)
+        {
+            return rightNode;
+        }
+        if(rightNode==null)
+        {
+            return leftNode;
+        }
+
+        Node leftEnd = leftNode.left;
+        Node rightEnd = rightNode.left;
+
+        leftNode.left = rightEnd;
+        rightEnd.right = leftNode;
+
+        leftEnd.right = rightNode;
+        rightNode.left = leftEnd;
+        return leftNode;
     }
 }
